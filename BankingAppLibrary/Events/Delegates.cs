@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BankingAppLibrary.Events
 {
-    internal class Delegates
-    {
-    }
+    public delegate void TransactionEventHandler(
+        object sender,
+        TransactionEventArgs e);
+
+    public delegate void LoginEventHandler(
+        object sender,
+        LoginEventArgs e);
 }
