@@ -8,8 +8,8 @@ namespace BankingAppLibrary.Events
 {
     public enum LoginEventType
     {
-        None,   
-        Login, 
-        Logout  
+        None,
+        Login,
+        Logout
     }
 }
