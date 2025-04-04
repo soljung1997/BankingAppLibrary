@@ -66,7 +66,7 @@ namespace BankingAppLibrary.Accounts
         }
 
         // Monthly report logic
-        public override void PrepareMonthlyStatement()
+        public override void PrepareMonthlyReport()
         {
             decimal serviceCharge = transactions.Count * COST_PER_TRANSACTION;
             decimal interest = (LowestBalance * INTEREST_RATE) / 12;

@@ -65,7 +65,7 @@ namespace BankingAppLibrary.Accounts
         }
 
         // Monthly report — apply interest and reset transaction list
-        public override void PrepareMonthlyStatement()
+        public override void PrepareMonthlyReport()
         {
             decimal interest = (LowestBalance * INTEREST_RATE) / 12;
             Balance -= interest;
