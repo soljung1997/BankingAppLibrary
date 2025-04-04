@@ -71,7 +71,7 @@ namespace BankingAppLibrary.Accounts
         }
 
         // Abstract method for monthly statements
-        public abstract void PrepareMonthlyStatement();
+        public abstract void PrepareMonthlyReport();
 
         // Display string for account
         public override string ToString()

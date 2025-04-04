@@ -9,7 +9,7 @@ using BankingAppLibrary.Models;
 
 namespace BankingAppLibrary.Accounts
 {
-    public class VisaAccount : Account, ITransaction
+    public class VisaAccount : Account
     {
         // Fields
         private decimal creditLimit;
@@ -71,6 +71,15 @@ namespace BankingAppLibrary.Accounts
             Balance -= interest;
 
             transactions.Clear(); // Re-initialize transaction list
+        }
+        public void Pay(decimal amount, Person person)
+        {
+            DoPayment(amount, person);
+        }
+
+        public void Purchase(decimal amount, Person person)
+        {
+            DoPurchase(amount, person);
         }
     }
 }

@@ -8,8 +8,10 @@ namespace BankingAppLibrary.Events
 {
     public class TransactionEventArgs : LoginEventArgs
     {
+        // Property
         public decimal Amount { get; }
 
+        // Constructor
         public TransactionEventArgs(string name, decimal amount, bool success)
             : base(name, success, LoginEventType.None)
         {

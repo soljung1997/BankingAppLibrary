@@ -9,7 +9,7 @@ using BankingAppLibrary.Models;
 
 namespace BankingAppLibrary.Accounts
 {
-    public class SavingAccount : Account, ITransaction
+    public class SavingAccount : Account
     {
         // Static constants
         private const decimal COST_PER_TRANSACTION = 0.5m;

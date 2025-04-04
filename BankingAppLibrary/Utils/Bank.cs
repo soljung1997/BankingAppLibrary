@@ -4,6 +4,7 @@ using BankingAppLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace BankingAppLibrary.Utils
 {
@@ -97,13 +98,13 @@ namespace BankingAppLibrary.Utils
 
         public static void SaveAccounts(string filename)
         {
-            string json = JsonSerializer.Serialize(ACCOUNTS.Values);
+            string json = JsonConvert.SerializeObject(ACCOUNTS.Values, Formatting.Indented);
             File.WriteAllText(filename, json);
         }
 
         public static void SaveUsers(string filename)
         {
-            string json = JsonSerializer.Serialize(USERS.Values);
+            string json = JsonConvert.SerializeObject(USERS.Values, Formatting.Indented);
             File.WriteAllText(filename, json);
         }
 
@@ -155,6 +156,17 @@ namespace BankingAppLibrary.Utils
             Person user = GetUser(name);
             account.AddUser(user);
         }
+        public static List<Transaction> GetAllTransactions()
+        {
+            List<Transaction> allTransactions = new List<Transaction>();
+
+            foreach (Account account in ACCOUNTS.Values)
+            {
+                allTransactions.AddRange(account.transactions);
+            }
+
+            return allTransactions;
+        }
     }
-    }
+    
 }
