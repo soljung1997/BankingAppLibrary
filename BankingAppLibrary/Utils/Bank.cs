@@ -1,11 +1,12 @@
 ﻿using BankingAppLibrary.Accounts;
 using BankingAppLibrary.Models;
+using BankingAppLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.IO;
 
 namespace BankingAppLibrary.Utils
 {
@@ -43,6 +44,7 @@ namespace BankingAppLibrary.Utils
         }
 
         // Methods
+
         // PrintAccounts method
         public static void PrintAccounts()
         {
@@ -83,7 +85,8 @@ namespace BankingAppLibrary.Utils
                 return user;
             }
 
-            throw new AccountException(ExceptionType.USER_NOT_FOUND);
+            // Use correct exception type: USER_DOES_NOT_EXIST
+            throw new AccountException(AccountExceptionType.USER_DOES_NOT_EXIST);
         }
 
         // GetAccount method
@@ -94,7 +97,8 @@ namespace BankingAppLibrary.Utils
                 return account;
             }
 
-            throw new AccountException(ExceptionType.ACCOUNT_NOT_FOUND);
+            // Use correct exception type: ACCOUNT_DOES_NOT_EXIST
+            throw new AccountException(AccountExceptionType.ACCOUNT_DOES_NOT_EXIST);
         }
 
         // AddUser method
@@ -102,7 +106,8 @@ namespace BankingAppLibrary.Utils
         {
             if (USERS.ContainsKey(sin))
             {
-                throw new AccountException(ExceptionType.USER_ALREADY_EXISTS);
+                // Use correct exception type: USER_ALREADY_EXIST
+                throw new AccountException(AccountExceptionType.USER_ALREADY_EXIST);
             }
 
             var person = new Person(name, sin);
