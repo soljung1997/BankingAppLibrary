@@ -1,4 +1,5 @@
-﻿using BankingAppLibrary.Utils;
+﻿using BankingAppLibrary.Models;
+using BankingAppLibrary.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BankingAppLibrary.Events
         // Properties
         public string PersonName { get; }
         public bool Success { get; }
-        public DateTime Time { get; }
+        public DayTime Time { get; }
         public LoginEventType EventType { get; }
 
         // Constructor

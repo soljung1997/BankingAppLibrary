@@ -15,17 +15,22 @@ namespace BankingAppLibrary.Models
         public Person Originator { get; }
         public DayTime Time { get; }
 
+        // Constructor
         public Transaction(string accountNumber, decimal amount, Person person)
         {
             AccountNumber = accountNumber;
             Amount = amount;
             Originator = person;
-            Time = Util.Now;
+            Time = Util.Now; // Assuming Util has a static property Now of type DayTime
         }
 
+        // ToString method override
         public override string ToString()
         {
-            return $"{AccountNumber} {Amount:C} {Originator?.Name} {Time}";
+            return $"Transaction for Account: {AccountNumber}, " +
+                   $"By: {Originator}, " +
+                   $"Amount: {Amount:C}, " +
+                   $"Time: {Time}";
         }
     }
 

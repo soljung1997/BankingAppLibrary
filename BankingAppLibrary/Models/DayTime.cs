@@ -6,38 +6,53 @@ using System.Threading.Tasks;
 
 namespace BankingAppLibrary.Models
 {
-    public class DayTime
+    public struct DayTime
     {
-        //may need to provide logic
+        // Private field to store minutes since 2023-01-01 00:00
         private long minutes;
 
-        //constructor
+        // Constructor
         public DayTime(long minutes)
         {
             this.minutes = minutes;
         }
 
-        //methods
-        public static DayTime operator +(DayTime lhs, int minutes)
+        // Overload the + operator
+        public static DayTime operator +(DayTime lhs, int additionalMinutes)
         {
-            return new DayTime(lhs.minutes + minutes);
+            return new DayTime(lhs.minutes + additionalMinutes);
         }
 
+        // AddMinutes method for use in Util class
+        public DayTime AddMinutes(int additionalMinutes)
+        {
+            return this + additionalMinutes;
+        }
+
+        // ToString override to convert minutes to Y-M-D H:M format
         public override string ToString()
         {
-            long minutes = this.minutes;
+            // Time breakdown constants
+            const int MinutesPerHour = 60;
+            const int MinutesPerDay = 1440;
+            const int MinutesPerMonth = 43200;
+            const int MinutesPerYear = 518400;
 
-            const int HOUR = 60;
-            const int DAY = 24 * HOUR;
-            const int MONTH = 30 * DAY;
-            const int YEAR = 12 * MONTH;
+            long remaining = minutes;
 
-            int year = 2023 + (int)(minutes / YEAR);
-            int month = 1 + (int)((minutes % YEAR) / MONTH);
-            int day = 1 + (int)((minutes % MONTH) / DAY);
-            int hour = (int)((minutes % DAY) / HOUR);
-            int minute = (int)(minutes % HOUR);
-            return $"{year:D4} - {month:D2} - {day:D2} {hour:D2}:{minutes:D2}";
+            long year = 2023 + (remaining / MinutesPerYear);
+            remaining %= MinutesPerYear;
+
+            long month = 1 + (remaining / MinutesPerMonth);
+            remaining %= MinutesPerMonth;
+
+            long day = 1 + (remaining / MinutesPerDay);
+            remaining %= MinutesPerDay;
+
+            long hour = remaining / MinutesPerHour;
+            long minute = remaining % MinutesPerHour;
+
+            return $"{year:D4}-{month:D2}-{day:D2} {hour:D2}:{minute:D2}";
         }
     }
 }

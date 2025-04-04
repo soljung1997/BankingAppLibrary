@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BankingAppLibrary.Exceptions;
 
 namespace BankingAppLibrary.Models
 {
@@ -41,7 +42,7 @@ namespace BankingAppLibrary.Models
                 OnLogin?.Invoke(this, new LoginEventArgs(Name, false, LoginEventType.Login));
 
                 // Throw an AccountException
-                throw new AccountException(ExceptionType.PASSWORD_INCORRECT);
+                throw new AccountException(AccountExceptionType.PASSWORD_INCORRECT);
             }
 
             IsAuthenticated = true;
@@ -66,20 +67,4 @@ namespace BankingAppLibrary.Models
         }
     }
 
-    // Custom exception class for handling account-related exceptions
-    public class AccountException : Exception
-    {
-        public ExceptionType ExceptionType { get; }
-
-        public AccountException(ExceptionType type) : base(type.ToString())
-        {
-            ExceptionType = type;
-        }
-    }
-
-    // Enum to represent different exception types
-    public enum ExceptionType
-    {
-        PASSWORD_INCORRECT
-    }
 }

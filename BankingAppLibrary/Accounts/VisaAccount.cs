@@ -11,54 +11,66 @@ namespace BankingAppLibrary.Accounts
 {
     public class VisaAccount : Account, ITransaction
     {
+        // Fields
         private decimal creditLimit;
-        private static readonly decimal INTEREST_RATE = 0.1995m;
-    
+        private const decimal INTEREST_RATE = 0.1995m;
+
+        // Constructor
         public VisaAccount(decimal balance = 0, decimal creditLimit = 1200)
+            : base("VS", balance)
         {
             this.creditLimit = creditLimit;
         }
 
+        // DoPayment adds positive amount
         public void DoPayment(decimal amount, Person person)
         {
-            //calls Deposit() from the base class with appropriate arguments
             base.Deposit(amount, person);
 
-            //calls OnTransactionOccur method of the base class with the appropriate arguments
-            //the second argument TransactionEventArgs needs the name of the person, the amount and true (success of the operation)
-            var args = new TransactionEventArgs(person.Name, amount, true);
-            OnTransactionOccur(this, args);
+            TransactionEventArgs args = new TransactionEventArgs(
+                person.Name,
+                amount,
+                true
+            );
+
+            base.OnTransactionOccur(this, args);
         }
 
+        // DoPurchase subtracts amount if allowed
         public void DoPurchase(decimal amount, Person person)
         {
-            if (!IsUser(person))
-            {
-                OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
+            bool isUser = base.IsUser(person);
 
-                throw new AccountException("User not authorized for this account", AccountExceptionType.UserNotAuthorized);
+            if (!isUser)
+            {
+                base.OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
+                throw new AccountException(AccountExceptionType.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
             }
 
-            if (!person.IsAuthenticated())
+            if (!person.IsAuthenticated)
             {
-                OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
-                throw new AccountException("User not authenticated", AccountExceptionType.UserNotAuthenticated);
+                base.OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
+                throw new AccountException(AccountExceptionType.USER_NOT_LOGGED_IN);
             }
 
-            if (Balance + creditLimit < amount)
+            if (amount > Balance + creditLimit)
             {
-                OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
-                throw new AccountException("Insufficient funds", AccountExceptionType.InsufficientFunds);
+                base.OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, false));
+                throw new AccountException(AccountExceptionType.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
             }
 
-            base.Deposit(-amount, person);
-            OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, true));
+            base.Deposit(-amount, person); // negative amount = purchase
+
+            base.OnTransactionOccur(this, new TransactionEventArgs(person.Name, amount, true));
         }
 
-        public override void PrepareMonthlyReport()
+        // Monthly report — apply interest and reset transaction list
+        public override void PrepareMonthlyStatement()
         {
-            Balance -= (LowestBalance * INTEREST_RATE) / 12;
-            transactions.Clear();
+            decimal interest = (LowestBalance * INTEREST_RATE) / 12;
+            Balance -= interest;
+
+            transactions.Clear(); // Re-initialize transaction list
         }
     }
 }
