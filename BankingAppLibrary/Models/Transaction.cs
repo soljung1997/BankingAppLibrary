@@ -27,11 +27,13 @@ namespace BankingAppLibrary.Models
         // ToString method override
         public override string ToString()
         {
-            return $"Transaction for Account: {AccountNumber}, " +
-                   $"By: {Originator}, " +
-                   $"Amount: {Amount:C}, " +
-                   $"Time: {Time}";
+            string amountStr = Amount < 0
+                ? $"-{Math.Abs(Amount):C}"
+                : $"{Amount:C}";
+
+            return $"{AccountNumber} {amountStr} {Originator.Name} {Time}";
         }
+
     }
 
 }

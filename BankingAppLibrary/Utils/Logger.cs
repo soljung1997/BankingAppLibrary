@@ -18,11 +18,20 @@ namespace BankingAppLibrary.Utils
             loginEvents.Add(entry);
         }
 
-        public static void TransactionHandler(object sender, TransactionEventArgs args)
+        public static void TransactionHandler(object sender, EventArgs e)
         {
-            string operation = args.Amount > 0 ? "Deposit" : "Withdraw";
-            string entry = $"{args.PersonName} {operation} {Math.Abs(args.Amount):C} {(args.Success ? "successfully" : "unsuccessfully")}";
-            transactionEvents.Add(entry);
+            TransactionEventArgs args = e as TransactionEventArgs;
+            if (args == null) return;
+
+            string result = $"{Math.Abs(args.Amount):C2} ";
+
+            result += args.Amount >= 0 ? "deposited" : "withdrawn";
+
+            result += $" by {args.PersonName} on {Util.Now}";
+
+            
+
+            transactionEvents.Add(result);
         }
 
         public static void DisplayLoginEvents()
